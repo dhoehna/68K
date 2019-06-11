@@ -1,0 +1,25 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio 15
+VisualStudioVersion = 15.0.28307.572
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "68KAssembler", "68KAssembler\68KAssembler.csproj", "{AE1417DF-DAA6-4A7F-AFA5-1843AA79D9A2}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{AE1417DF-DAA6-4A7F-AFA5-1843AA79D9A2}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{AE1417DF-DAA6-4A7F-AFA5-1843AA79D9A2}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{AE1417DF-DAA6-4A7F-AFA5-1843AA79D9A2}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{AE1417DF-DAA6-4A7F-AFA5-1843AA79D9A2}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {32FD15D1-3256-4E5A-A915-9D3B930447DA}
+	EndGlobalSection
+EndGlobal
