@@ -45,7 +45,7 @@ namespace Assembler
                 return;
             }
 
-            int startLineNumber = findStart(asmFile.OpenText());
+            int startLineNumber = FindStart(asmFile.OpenText());
             if (startLineNumber == -1)
             {
                 Console.WriteLine("\"start program\" could not be found");
@@ -53,7 +53,7 @@ namespace Assembler
                 Console.ReadKey();
             }
 
-            int endLineNumber = findEnd(asmFile.OpenText());
+            int endLineNumber = FindEnd(asmFile.OpenText());
             if (endLineNumber == -1)
             {
                 Console.WriteLine("\"end program\" could not be found");
@@ -86,6 +86,8 @@ namespace Assembler
 
             //We only care about Add binary
             //<ea> = effective Address
+
+            StreamWriter writer = new StreamWriter(Environment.CurrentDirectory + "\\output.txt");
             bool done = false;
 
             while (!done)
@@ -94,7 +96,16 @@ namespace Assembler
 
                 if (!instruction.Equals(END_INSTRUCTION, StringComparison.OrdinalIgnoreCase))
                 {
-                    //process the instruction
+                    string[] instructionParts = instruction.Split(' ');
+                    string instructionMnemonic = instructionParts[0];
+
+                    string binaryInstruction = string.Empty;
+
+                    if(instructionMnemonic.Equals("ADD", StringComparison.OrdinalIgnoreCase) 
+                        || instructionMnemonic.Equals("AddBinary", StringComparison.OrdinalIgnoreCase))
+                    {
+                        binaryInstruction = ProcessAdd(instructionParts);
+                    }
                 }
                 else
                 {
@@ -102,10 +113,129 @@ namespace Assembler
                 }
             }
 
+            writer.Flush();
+            writer.Close();
+
+            reader.Close();
+
 
         }
 
-        static int findStart(StreamReader asmFile)
+        static string ProcessAdd(string[] arguments)
+        {
+            string output = "1101";
+            //Source mode
+            //Opmode
+
+            string instructionMnemonic = arguments[0];
+            string mode = arguments[1];
+            string source = arguments[2];
+            string destination = arguments[3];
+
+            if(source[0] == 'D')
+            {
+                switch(source[1])
+                {
+                    case '0':
+                        output += "000";
+                        break;
+                    case '1':
+                        output += "001";
+                        break;
+                    case '2':
+                        output += "010";
+                        break;
+                    case '3':
+                        output += "011";
+                        break;
+                    case '4':
+                        output += "100";
+                        break;
+                    case '5':
+                        output += "101";
+                        break;
+                    case '6':
+                        output += "110";
+                        break;
+                    case '7':
+                        output += "111";
+                        break;
+
+                }
+            }
+            else
+            {
+                switch (destination[1])
+                {
+                    case '0':
+                        output += "000";
+                        break;
+                    case '1':
+                        output += "001";
+                        break;
+                    case '2':
+                        output += "010";
+                        break;
+                    case '3':
+                        output += "011";
+                        break;
+                    case '4':
+                        output += "100";
+                        break;
+                    case '5':
+                        output += "101";
+                        break;
+                    case '6':
+                        output += "110";
+                        break;
+                    case '7':
+                        output += "111";
+                        break;
+
+                }
+            }
+
+            if(source[0] == 'D')
+            {
+                if(mode.Equals("B", StringComparison.OrdinalIgnoreCase)
+                    || mode.Equals("BYTE", StringComparison.OrdinalIgnoreCase))
+                {
+                    output += "100";
+                }
+                else if (mode.Equals("W", StringComparison.OrdinalIgnoreCase)
+                    || mode.Equals("WORD", StringComparison.OrdinalIgnoreCase))
+                {
+                    output += "101";
+                }
+                else if (mode.Equals("L", StringComparison.OrdinalIgnoreCase)
+                    || mode.Equals("LONG", StringComparison.OrdinalIgnoreCase))
+                {
+                    output += "110";
+                }
+            }
+            else
+            {
+                if (mode.Equals("B", StringComparison.OrdinalIgnoreCase)
+                    || mode.Equals("BYTE", StringComparison.OrdinalIgnoreCase))
+                {
+                    output += "000";
+                }
+                else if (mode.Equals("W", StringComparison.OrdinalIgnoreCase)
+                    || mode.Equals("WORD", StringComparison.OrdinalIgnoreCase))
+                {
+                    output += "010";
+                }
+                else if (mode.Equals("L", StringComparison.OrdinalIgnoreCase)
+                    || mode.Equals("LONG", StringComparison.OrdinalIgnoreCase))
+                {
+                    output += "011";
+                }
+            }
+
+            return output;
+        }
+
+        static int FindStart(StreamReader asmFile)
         {
             int lineNumber = 0;
             while (!asmFile.EndOfStream)
@@ -122,7 +252,7 @@ namespace Assembler
             return -1;
         }
 
-        static int findEnd(StreamReader asmFile)
+        static int FindEnd(StreamReader asmFile)
         {
             int lineNumber = 0;
             while (!asmFile.EndOfStream)
