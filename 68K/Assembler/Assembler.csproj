@@ -43,13 +43,17 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Common\Constants.cs" />
-    <Compile Include="Instructions\AddBinary.cs" />
+    <Compile Include="Common\OperandSize.cs" />
+    <Compile Include="InstructionFactory.cs" />
+    <Compile Include="Instructions\ADD.cs" />
+    <Compile Include="Instructions\IInstruction.cs" />
+    <Compile Include="OperandSizeFactory.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />
   </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>
