@@ -25,5 +25,17 @@ namespace Assembler
                 { "long", OperandSize.operandSize.LONG_WORD }
             };
         }
+
+        public OperandSize.operandSize GetOperand(string operand)
+        {
+            if(operandSizes.ContainsKey(operand))
+            {
+                return operandSizes[operand];
+            }
+            else
+            {
+                throw new KeyNotFoundException("Operand size " + operand + " does not exist");
+            }
+        }
     }
 }

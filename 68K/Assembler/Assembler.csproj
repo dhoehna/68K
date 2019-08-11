@@ -43,6 +43,9 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Common\AddressingModes.cs" />
+    <Compile Include="Common\Conversion.cs" />
+    <Compile Include="Common\EffectiveAddress.cs" />
     <Compile Include="Common\OperandSize.cs" />
     <Compile Include="InstructionFactory.cs" />
     <Compile Include="Instructions\ADD.cs" />
