@@ -41,17 +41,23 @@ namespace Assembler.Common
             if(lowerCasedEffectiveAddress[0] == 'd')
             {
                 EffectiveAddress ea = addressingModes["dn"];
-                ea.SetReigster(converter.DataRegisterToBinary(Convert.ToInt32(lowerCasedEffectiveAddress[1])));
+                ea.SetRegister(converter.DataRegisterToBinary(Convert.ToInt32(lowerCasedEffectiveAddress[1])));
 
                 return ea;
             }
             else if(lowerCasedEffectiveAddress[0] == 'a')
             {
-                return addressingModes["an"];
+                EffectiveAddress ea = addressingModes["an"];
+                ea.SetRegister(converter.DataRegisterToBinary(Convert.ToInt32(lowerCasedEffectiveAddress[1])));
+
+                return ea;
             }
             else if(lowerCasedEffectiveAddress[0] == '-')
             {
-                return addressingModes["-(an)"];
+                EffectiveAddress ea = addressingModes["-(an)"];
+                ea.SetRegister(converter.DataRegisterToBinary(Convert.ToInt32(lowerCasedEffectiveAddress[3])));
+
+                return ea;
             }
             else if (lowerCasedEffectiveAddress[0] == '#')
             {
@@ -65,7 +71,10 @@ namespace Assembler.Common
             {
                 if (effectiveAddressParts[0][effectiveAddressParts.Length - 1] == '+')
                 {
-                    return addressingModes["(an)+"];
+                    EffectiveAddress ea = addressingModes["(an)+"];
+                    ea.SetRegister(converter.DataRegisterToBinary(Convert.ToInt32(effectiveAddressParts[0][1])));
+
+                    return ea;
                 }
                 else if (effectiveAddressParts[0][effectiveAddressParts.Length - 1] == 'w')
                 {
@@ -77,14 +86,20 @@ namespace Assembler.Common
                 }
                 else if(effectiveAddressParts[0][0] == 'a')
                 {
-                    return addressingModes["(an)"];
+                    EffectiveAddress ea = addressingModes["(an)"];
+                    ea.SetRegister(converter.DataRegisterToBinary(Convert.ToInt32(effectiveAddressParts[0][1])));
+
+                    return ea;
                 }
             }
             else if (effectiveAddressParts.Length == 2)
             {
                 if(effectiveAddressParts[1].Equals("an"))
                 {
-                    return addressingModes["(d16,an)"];
+                    EffectiveAddress ea = addressingModes["(d16,an)"];
+                    ea.SetRegister(converter.DataRegisterToBinary(Convert.ToInt32(effectiveAddressParts[1][1])));
+
+                    return ea;
                 }
                 else if(effectiveAddressParts[1].Equals("pc"))
                 {
@@ -95,7 +110,10 @@ namespace Assembler.Common
             {
                 if (effectiveAddressParts[1].Equals("an"))
                 {
-                    return addressingModes["(d8,an,xn)"];
+                    EffectiveAddress ea = addressingModes["(d8,an,xn)"];
+                    ea.SetRegister(converter.DataRegisterToBinary(Convert.ToInt32(effectiveAddressParts[1][1])));
+
+                    return ea;
                 }
                 else if (effectiveAddressParts[1].Equals("pc"))
                 {
@@ -103,7 +121,7 @@ namespace Assembler.Common
                 }
             }
 
-            throw new Exception("YOu done fucked up");
+            throw new Exception("You done fucked up");
         }
 
 

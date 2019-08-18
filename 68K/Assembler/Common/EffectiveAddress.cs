@@ -27,7 +27,7 @@ namespace Assembler.Common
             return register;
         }
 
-        public void SetReigster(string reigster)
+        public void SetRegister(string register)
         {
             this.register = register;
         }

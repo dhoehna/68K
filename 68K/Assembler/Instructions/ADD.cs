@@ -9,6 +9,10 @@ namespace Assembler.Instructions
 {
     public class ADD : IInstruction
     {
+        private const int OP_SIZE = 1;
+        private const int SOURCE = 2;
+        private const int DESTINATION = 3;
+
         public string ConvertToBinary(string instruction)
         {
             StringBuilder binary = new StringBuilder("1101");
@@ -19,18 +23,18 @@ namespace Assembler.Instructions
 
             //SOurce is a data register
             //append register
-            if(instructionParts[2][0] == 'd')
+            if(instructionParts[SOURCE][0] == 'd')
             {
-                binary.Append(converter.DataRegisterToBinary(Convert.ToInt32(instructionParts[2][1])));
+                binary.Append(converter.DataRegisterToBinary(Convert.ToInt32(instructionParts[SOURCE][1])));
                 isSourceDataReigster = true;
             }
             else
             {
-                binary.Append(converter.DataRegisterToBinary(Convert.ToInt32(instructionParts[3][1])));
+                binary.Append(converter.DataRegisterToBinary(Convert.ToInt32(instructionParts[DESTINATION][1])));
             }
 
             OperandSizeFactory operandFactory = new OperandSizeFactory();
-            OperandSize.operandSize operandSize = operandFactory.GetOperand(instructionParts[1]);
+            OperandSize.operandSize operandSize = operandFactory.GetOperand(instructionParts[OP_SIZE]);
 
             //Append opmode
             binary.Append(GetBinaryFromOpmode(operandSize, isSourceDataReigster));
@@ -40,26 +44,39 @@ namespace Assembler.Instructions
             EffectiveAddress effectiveAddress = null;
             if(isSourceDataReigster)
             {
-                effectiveAddress = addressingModes.GetAddressingMode(instructionParts[3]);
+                effectiveAddress = addressingModes.GetAddressingMode(instructionParts[DESTINATION]);
             }
             else
             {
-                effectiveAddress = addressingModes.GetAddressingMode(instructionParts[2]);
+                effectiveAddress = addressingModes.GetAddressingMode(instructionParts[SOURCE]);
             }
 
             binary.Append(effectiveAddress.GetMode());
+            binary.Append(effectiveAddress.GetRegister());
 
-            if(effectiveAddress.GetRegister() != null)
-            {
-                binary.Append(effectiveAddress.GetRegister());
-            }
-            else
-            {
-                
-            }
-
-            return binary.ToString(); ;
+            return binary.ToString();
         }
+
+        public string ConvertInstructionToBinary()
+        {
+            return null;
+        }
+
+        public string ConvertSpecialOperandSpecifiers()
+        {
+            return null;
+        }
+
+        public string ConvertImmediateOrSourceEA()
+        {
+            return null;
+        }
+
+        public string ConvertDestinationEA()
+        {
+            return null;
+        }
+
 
         private string GetBinaryFromOpmode(OperandSize.operandSize operandSize, bool isSourceDataRegister)
         {
