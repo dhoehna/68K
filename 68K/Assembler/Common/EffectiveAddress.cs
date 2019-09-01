@@ -31,5 +31,22 @@ namespace Assembler.Common
         {
             this.register = register;
         }
+
+        public string CombineEaAndInstruciton(string instruction)
+        {
+            if(this.mode == "000" || this.mode == "001" || this.mode == "010")
+            {
+                return "0000000000" + this.mode + this.register;
+            }
+            else if (this.mode == "011")
+            {
+
+            }
+
+
+
+
+            return null;
+        }
     }
 }

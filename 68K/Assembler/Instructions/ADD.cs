@@ -16,6 +16,34 @@ namespace Assembler.Instructions
         public string ConvertToBinary(string instruction)
         {
             StringBuilder binary = new StringBuilder("1101");
+            binary.Append(ConvertInstructionToBinary(instruction));
+
+            bool isSourceDataReigster = false;
+
+            //SOurce is a data register
+            //append register
+            string[] instructionParts = instruction.Split(' ');
+            if (instructionParts[SOURCE][0] == 'd')
+            {
+                isSourceDataReigster = true;
+            }
+
+            if(isSourceDataReigster)
+            {
+                binary.Append(ConvertDestinationEA());
+            }
+            else
+            {
+                binary.Append(ConvertImmediateOrSourceEA(instructionParts));
+            }
+
+            return binary.ToString();
+
+        }
+
+        public string ConvertInstructionToBinary(string instruction)
+        {
+            StringBuilder binary = new StringBuilder();
             string[] instructionParts = instruction.Split(' ');
 
             bool isSourceDataReigster = false;
@@ -23,7 +51,7 @@ namespace Assembler.Instructions
 
             //SOurce is a data register
             //append register
-            if(instructionParts[SOURCE][0] == 'd')
+            if (instructionParts[SOURCE][0] == 'd')
             {
                 binary.Append(converter.DataRegisterToBinary(Convert.ToInt32(instructionParts[SOURCE][1])));
                 isSourceDataReigster = true;
@@ -42,7 +70,7 @@ namespace Assembler.Instructions
             //Append effective Address
             AddressingModes addressingModes = new AddressingModes();
             EffectiveAddress effectiveAddress = null;
-            if(isSourceDataReigster)
+            if (isSourceDataReigster)
             {
                 effectiveAddress = addressingModes.GetAddressingMode(instructionParts[DESTINATION]);
             }
@@ -57,19 +85,31 @@ namespace Assembler.Instructions
             return binary.ToString();
         }
 
-        public string ConvertInstructionToBinary()
-        {
-            return null;
-        }
-
         public string ConvertSpecialOperandSpecifiers()
         {
-            return null;
+            return string.Empty;
         }
 
-        public string ConvertImmediateOrSourceEA()
+        public string ConvertImmediateOrSourceEA(string[] instructionParts)
         {
-            return null;
+            StringBuilder binary = new StringBuilder();
+
+            //If source is immediate
+            if (instructionParts[2][0] == '#')
+            {
+                string immediateNumber = instructionParts[2].Substring(1);
+                Int16 number = Convert.ToInt16(immediateNumber);
+                binary.Append(Convert.ToString(number, 2));
+            }
+            else
+            {
+                AddressingModes addressingModes = new AddressingModes();
+                EffectiveAddress effectiveAddress = addressingModes.GetAddressingMode(instructionParts[2]);
+            }
+
+
+
+            return binary.ToString();
         }
 
         public string ConvertDestinationEA()
