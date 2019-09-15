@@ -6,9 +6,9 @@ using System.Threading.Tasks;
 
 namespace Assembler.Common
 {
-    public class Conversion
+    public static class Conversion
     {
-        public string DataRegisterToBinary(int dataRegisterNumber)
+        public static string DataRegisterToBinary(int dataRegisterNumber)
         {
             if(dataRegisterNumber == 0)
             {

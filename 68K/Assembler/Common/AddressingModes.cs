@@ -6,11 +6,11 @@ using System.Threading.Tasks;
 
 namespace Assembler.Common
 {
-    public class AddressingModes
+    static class AddressingModes
     {
-        private Dictionary<string, EffectiveAddress> addressingModes;
+        private static Dictionary<string, EffectiveAddress> addressingModes;
 
-        public AddressingModes()
+        static AddressingModes()
         {
             addressingModes = new Dictionary<string, EffectiveAddress>();
 
@@ -32,30 +32,29 @@ namespace Assembler.Common
             addressingModes.Add("(d8,pc,xn)", new EffectiveAddress("111", "011"));
         }
 
-        public EffectiveAddress GetAddressingMode(string effectiveAddress)
+        public static EffectiveAddress GetAddressingMode(string effectiveAddress)
         {
-            Conversion converter = new Conversion();
             string lowerCasedEffectiveAddress = effectiveAddress.ToLower();
 
             //Test for all addressing modes that don't start with a hash
             if(lowerCasedEffectiveAddress[0] == 'd')
             {
                 EffectiveAddress ea = addressingModes["dn"];
-                ea.SetRegister(converter.DataRegisterToBinary(Convert.ToInt32(lowerCasedEffectiveAddress[1])));
+                ea.SetRegister(Conversion.DataRegisterToBinary(Convert.ToInt32(lowerCasedEffectiveAddress[1])));
 
                 return ea;
             }
             else if(lowerCasedEffectiveAddress[0] == 'a')
             {
                 EffectiveAddress ea = addressingModes["an"];
-                ea.SetRegister(converter.DataRegisterToBinary(Convert.ToInt32(lowerCasedEffectiveAddress[1])));
+                ea.SetRegister(Conversion.DataRegisterToBinary(Convert.ToInt32(lowerCasedEffectiveAddress[1])));
 
                 return ea;
             }
             else if(lowerCasedEffectiveAddress[0] == '-')
             {
                 EffectiveAddress ea = addressingModes["-(an)"];
-                ea.SetRegister(converter.DataRegisterToBinary(Convert.ToInt32(lowerCasedEffectiveAddress[3])));
+                ea.SetRegister(Conversion.DataRegisterToBinary(Convert.ToInt32(lowerCasedEffectiveAddress[3])));
 
                 return ea;
             }
@@ -72,7 +71,7 @@ namespace Assembler.Common
                 if (effectiveAddressParts[0][effectiveAddressParts.Length - 1] == '+')
                 {
                     EffectiveAddress ea = addressingModes["(an)+"];
-                    ea.SetRegister(converter.DataRegisterToBinary(Convert.ToInt32(effectiveAddressParts[0][1])));
+                    ea.SetRegister(Conversion.DataRegisterToBinary(Convert.ToInt32(effectiveAddressParts[0][1])));
 
                     return ea;
                 }
@@ -87,7 +86,7 @@ namespace Assembler.Common
                 else if(effectiveAddressParts[0][0] == 'a')
                 {
                     EffectiveAddress ea = addressingModes["(an)"];
-                    ea.SetRegister(converter.DataRegisterToBinary(Convert.ToInt32(effectiveAddressParts[0][1])));
+                    ea.SetRegister(Conversion.DataRegisterToBinary(Convert.ToInt32(effectiveAddressParts[0][1])));
 
                     return ea;
                 }
@@ -97,13 +96,20 @@ namespace Assembler.Common
                 if(effectiveAddressParts[1].Equals("an"))
                 {
                     EffectiveAddress ea = addressingModes["(d16,an)"];
-                    ea.SetRegister(converter.DataRegisterToBinary(Convert.ToInt32(effectiveAddressParts[1][1])));
+                    ea.SetRegister(Conversion.DataRegisterToBinary(Convert.ToInt32(effectiveAddressParts[1][1])));
+
+                    int displacment = Convert.ToInt16(effectiveAddressParts[0]);
+                    ea.SetDisplacment(Convert.ToString(displacment, 2));
 
                     return ea;
                 }
                 else if(effectiveAddressParts[1].Equals("pc"))
                 {
-                    return addressingModes["(d16,pc)"];
+                    EffectiveAddress ea = addressingModes["(d16,pc)"];
+                    int displacment = Convert.ToInt16(effectiveAddressParts[0]);
+                    ea.SetDisplacment(Convert.ToString(displacment, 2));
+
+                    return ea;
                 }
             }
             else if(effectiveAddressParts.Length == 3)
@@ -111,13 +117,22 @@ namespace Assembler.Common
                 if (effectiveAddressParts[1].Equals("an"))
                 {
                     EffectiveAddress ea = addressingModes["(d8,an,xn)"];
-                    ea.SetRegister(converter.DataRegisterToBinary(Convert.ToInt32(effectiveAddressParts[1][1])));
+                    ea.SetRegister(Conversion.DataRegisterToBinary(Convert.ToInt32(effectiveAddressParts[1][1])));
+
+                    byte displacment = Convert.ToByte(effectiveAddressParts[0]);
+                    ea.SetDisplacment(Convert.ToString(displacment, 2));
 
                     return ea;
                 }
                 else if (effectiveAddressParts[1].Equals("pc"))
                 {
-                    return addressingModes["(d8,pc,xn)"];
+                    EffectiveAddress ea = addressingModes["(d8,pc,xn)"];
+                    ea.SetRegister(Conversion.DataRegisterToBinary(Convert.ToInt32(effectiveAddressParts[1][1])));
+
+                    byte displacment = Convert.ToByte(effectiveAddressParts[0]);
+                    ea.SetDisplacment(Convert.ToString(displacment, 2));
+
+                    return ea;
                 }
             }
 

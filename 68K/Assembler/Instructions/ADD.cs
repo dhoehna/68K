@@ -16,7 +16,7 @@ namespace Assembler.Instructions
         public string ConvertToBinary(string instruction)
         {
             StringBuilder binary = new StringBuilder("1101");
-            binary.Append(ConvertInstructionToBinary(instruction));
+            //binary.Append(ConvertInstructionToBinary(instruction));
 
             bool isSourceDataReigster = false;
 
@@ -28,62 +28,79 @@ namespace Assembler.Instructions
                 isSourceDataReigster = true;
             }
 
+            StringBuilder effectiveAddressAsBinary = new StringBuilder();
+            StringBuilder dataRegisterAsBinary = new StringBuilder();
             if(isSourceDataReigster)
             {
-                binary.Append(ConvertDestinationEA());
+                EffectiveAddress dataRegister = AddressingModes.GetAddressingMode(instructionParts[SOURCE]);
+                dataRegisterAsBinary.Append(dataRegister.GetRegister());
+
+                EffectiveAddress effectiveAddress = AddressingModes.GetAddressingMode(instructionParts[DESTINATION]);
+                effectiveAddressAsBinary.Append(effectiveAddress.GetRegister());
+                effectiveAddressAsBinary.Append(effectiveAddress.GetMode());
+
             }
             else
             {
-                binary.Append(ConvertImmediateOrSourceEA(instructionParts));
+
             }
+
+            //if(isSourceDataReigster)
+            //{
+            //    binary.Append(ConvertDestinationEA());
+            //}
+            //else
+            //{
+            //    binary.Append(ConvertImmediateOrSourceEA(instructionParts));
+            //}
 
             return binary.ToString();
 
         }
 
-        public string ConvertInstructionToBinary(string instruction)
-        {
-            StringBuilder binary = new StringBuilder();
-            string[] instructionParts = instruction.Split(' ');
+        //public string ConvertInstructionToBinary(string instruction)
+        //{
+        //    StringBuilder binary = new StringBuilder();
+        //    string[] instructionParts = instruction.Split(' ');
 
-            bool isSourceDataReigster = false;
-            Conversion converter = new Conversion();
+        //    bool isSourceDataReigster = false;
+        //    Conversion converter = new Conversion();
 
-            //SOurce is a data register
-            //append register
-            if (instructionParts[SOURCE][0] == 'd')
-            {
-                binary.Append(converter.DataRegisterToBinary(Convert.ToInt32(instructionParts[SOURCE][1])));
-                isSourceDataReigster = true;
-            }
-            else
-            {
-                binary.Append(converter.DataRegisterToBinary(Convert.ToInt32(instructionParts[DESTINATION][1])));
-            }
+        //    //SOurce is a data register
+        //    //append register
+        //    if (instructionParts[SOURCE][0] == 'd')
+        //    {
+        //        binary.Append(converter.DataRegisterToBinary(Convert.ToInt32(instructionParts[SOURCE][1])));
+        //        isSourceDataReigster = true;
+        //    }
+        //    else
+        //    {
+        //        binary.Append(converter.DataRegisterToBinary(Convert.ToInt32(instructionParts[DESTINATION][1])));
+        //    }
 
-            OperandSizeFactory operandFactory = new OperandSizeFactory();
-            OperandSize.operandSize operandSize = operandFactory.GetOperand(instructionParts[OP_SIZE]);
+        //    OperandSizeFactory operandFactory = new OperandSizeFactory();
+        //    OperandSize.operandSize operandSize = operandFactory.GetOperand(instructionParts[OP_SIZE]);
 
-            //Append opmode
-            binary.Append(GetBinaryFromOpmode(operandSize, isSourceDataReigster));
+        //    //Append opmode
+        //    binary.Append(GetBinaryFromOpmode(operandSize, isSourceDataReigster));
 
-            //Append effective Address
-            AddressingModes addressingModes = new AddressingModes();
-            EffectiveAddress effectiveAddress = null;
-            if (isSourceDataReigster)
-            {
-                effectiveAddress = addressingModes.GetAddressingMode(instructionParts[DESTINATION]);
-            }
-            else
-            {
-                effectiveAddress = addressingModes.GetAddressingMode(instructionParts[SOURCE]);
-            }
+        //    //Append effective Address
+        //    AddressingModes addressingModes = new AddressingModes();
+        //    EffectiveAddress effectiveAddress = null;
+        //    if (isSourceDataReigster)
+        //    {
+        //        effectiveAddress = addressingModes.GetAddressingMode(instructionParts[DESTINATION]);
+        //    }
+        //    else
+        //    {
+        //        effectiveAddress = addressingModes.GetAddressingMode(instructionParts[SOURCE]);
+        //    }
 
-            binary.Append(effectiveAddress.GetMode());
-            binary.Append(effectiveAddress.GetRegister());
+        //    binary.Append(effectiveAddress.GetMode());
+        //    binary.Append(effectiveAddress.GetRegister());
 
-            return binary.ToString();
-        }
+        //    return binary.ToString();
+        //}
 
         public string ConvertSpecialOperandSpecifiers()
         {
